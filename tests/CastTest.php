@@ -6,6 +6,7 @@ use Buzz\EssentialsSdk\Cast;
 
 class CastTest extends TestCase
 {
+    /** @test */
     public function test_copies_settings()
     {
         $class = new Example();
