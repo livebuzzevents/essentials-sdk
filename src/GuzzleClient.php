@@ -10,6 +10,7 @@ use Exception;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 use GuzzleHttp\Exception\ServerException as GuzzleServerException;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Client
@@ -65,7 +66,11 @@ class GuzzleClient implements Client
             if ((json_last_error() == JSON_ERROR_NONE)) {
                 return $decodedResponse;
             } else {
-                throw new ResponseException('Unexpected error! Response not valid JSON:'.$contents);
+                if (is_string($contents)) {
+                    return $contents;
+                }
+
+                throw new ResponseException('Unexpected error! Response not valid JSON:' . $contents);
             }
         } catch (GuzzleClientException $e) {
             $response = $e->getResponse();
