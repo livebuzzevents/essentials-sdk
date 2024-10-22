@@ -11,7 +11,6 @@ use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 use GuzzleHttp\Exception\ServerException as GuzzleServerException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class Client
@@ -83,12 +82,12 @@ class GuzzleClient implements Client
             } elseif ($response->getStatusCode() === 401) {
                 throw new HttpException(401, 'Unauthorized');
             } elseif ($response->getStatusCode() === 404) {
-                throw new NotFoundHttpException();
+                throw new ResponseException('Resource not found! Check your host!', 404, $e);
             } else {
                 throw new ResponseException('Unexpected error! Invalid response code!', 0, $e);
             }
         } catch (GuzzleServerException $e) {
-            if ($e->getCode() == 503) {
+            if ($e->getCode() === 503) {
                 throw new ServiceUnavailableException('System in maintenance mode!');
             }
 
