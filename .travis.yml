@@ -1,5 +1,11 @@
 language: php
 
+dist: jammy
+addons:
+    apt:
+        packages:
+        - "libonig5"
+
 php:
   - '8.2'
 
