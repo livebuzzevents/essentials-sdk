@@ -81,13 +81,13 @@ class GuzzleClient implements Client
             } elseif ($response->getStatusCode() === 401) {
                 abort(401);
             } elseif ($response->getStatusCode() === 404) {
-                throw new ResponseException('Resource not found! Check your host!', 0, $e);
+                abort(404);
             } else {
                 throw new ResponseException('Unexpected error! Invalid response code!', 0, $e);
             }
         } catch (GuzzleServerException $e) {
             if ($e->getCode() == 503) {
-                throw new ServiceUnavailableException('System in maintenance mode!');
+                abort(503);
             }
 
             throw new ServerException('Unexpected error! Please contact us for more information!', $e->getCode(), $e);
