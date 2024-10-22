@@ -10,7 +10,7 @@
   "license": "MIT",
   "type": "package",
   "require": {
-    "php": "^8.0",
+    "php": "^8.2",
     "guzzlehttp/guzzle": "~7.0",
     "symfony/http-kernel": "v7.1.5",
     "illuminate/support": "^10.0",
