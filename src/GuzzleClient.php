@@ -10,6 +10,7 @@ use Exception;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 use GuzzleHttp\Exception\ServerException as GuzzleServerException;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -66,6 +67,10 @@ class GuzzleClient implements Client
             if ((json_last_error() == JSON_ERROR_NONE)) {
                 return $decodedResponse;
             } else {
+                if (Str::contains($contents, ['login-via-signed-url'])) {
+                    return $contents;
+                }
+
                 throw new ResponseException('Unexpected error! Response not valid JSON:'.$contents);
             }
         } catch (GuzzleClientException $e) {
