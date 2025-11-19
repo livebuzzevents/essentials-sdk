@@ -64,14 +64,14 @@ class GuzzleClient implements Client
 
             $decodedResponse = json_decode($contents, true);
 
-            if ((json_last_error() == JSON_ERROR_NONE)) {
+            if ((json_last_error() === JSON_ERROR_NONE)) {
                 return $decodedResponse;
             } else {
-                if (Str::contains($contents, ['login-via-signed-url'])) {
+                if (Str::contains($contents, ['login-via-signed-url']) || Str::contains($url, ['download'])) {
                     return $contents;
                 }
 
-                throw new ResponseException('Unexpected error! Response not valid JSON:'.$contents);
+                throw new ResponseException('Unexpected error! Response not valid JSON:' . $contents);
             }
         } catch (GuzzleClientException $e) {
             $response = $e->getResponse();
