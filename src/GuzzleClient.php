@@ -92,6 +92,8 @@ class GuzzleClient implements Client
                 throw new HttpException(401);
             } elseif ($response->getStatusCode() === 404) {
                 throw new ResponseException('Resource not found! Check your host!', 404, $e);
+            } elseif ($response->getStatusCode() === 429) {
+                throw new ResponseException($e->getMessage(), 429, $e);
             } else {
                 throw new ResponseException('Unexpected error! Invalid response code!', 0, $e);
             }
