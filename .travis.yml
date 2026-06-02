@@ -7,7 +7,7 @@ addons:
         - "libonig5"
 
 php:
-  - '8.2'
+  - '8.3'
 
 install:
   - composer install --no-interaction --prefer-source
