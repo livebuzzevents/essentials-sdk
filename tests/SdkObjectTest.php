@@ -2,8 +2,11 @@
 
 namespace Tests;
 
+use Buzz\EssentialsSdk\Exceptions\ErrorException;
+
 class SdkObjectTest extends TestCase
 {
+    /** @test */
     public function test_parses_properties()
     {
         $class = new Example();
@@ -27,32 +30,33 @@ class SdkObjectTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Buzz\EssentialsSdk\Exceptions\ErrorException
-     * @expectedExceptionMessage Property orders is read-only!
-     */
+    /** @test */
     public function test_read_only_properties()
     {
         $example = new Example();
 
         $var = $example->orders;
 
+        $this->expectExceptionMessage("Property orders is read-only!");
+        $this->expectException(ErrorException::class);
+
         $example->orders = 123;
     }
 
-    /**
-     * @expectedException \Buzz\EssentialsSdk\Exceptions\ErrorException
-     * @expectedExceptionMessage Property note is write-only!
-     */
+    /** @test */
     public function test_write_only_properties()
     {
         $example = new Example();
 
         $example->note = 'some note';
 
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage("Property note is write-only!");
+
         $var = $example->note;
     }
 
+    /** @test */
     public function test_support_dirty_data()
     {
         $example = new Example();
@@ -100,6 +104,7 @@ class SdkObjectTest extends TestCase
         $this->assertTrue($example->isDirty());
     }
 
+    /** @test */
     public function test_to_array_returns_non_documented_data()
     {
         $example = new Example();
@@ -109,6 +114,7 @@ class SdkObjectTest extends TestCase
         $this->assertEquals($example->toArray(), ['some_property_name' => 'some_value']);
     }
 
+    /** @test */
     public function test_prepares_request_works()
     {
         $example = new Example();

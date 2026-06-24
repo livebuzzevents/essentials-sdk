@@ -10,7 +10,8 @@ use Exception;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 use GuzzleHttp\Exception\ServerException as GuzzleServerException;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class Client
@@ -63,10 +64,10 @@ class GuzzleClient implements Client
 
             $decodedResponse = json_decode($contents, true);
 
-            if ((json_last_error() == JSON_ERROR_NONE)) {
+            if ((json_last_error() === JSON_ERROR_NONE)) {
                 return $decodedResponse;
             } else {
-                if (is_string($contents)) {
+                if (Str::contains($contents, ['login-via-signed-url']) || Str::contains($url, ['download'])) {
                     return $contents;
                 }
 
@@ -84,14 +85,20 @@ class GuzzleClient implements Client
                     !empty($responseContent['code']) ? $responseContent['code'] : 0
                 );
             } elseif ($response->getStatusCode() === 401) {
-                throw new UnauthorizedException($contents, 0, $e);
+                if (config('app.debug')) {
+                    throw new HttpException(401, $contents);
+                }
+
+                throw new HttpException(401);
             } elseif ($response->getStatusCode() === 404) {
-                throw new ResponseException('Resource not found! Check your host!', 0, $e);
+                throw new ResponseException('Resource not found! Check your host!', 404, $e);
+            } elseif ($response->getStatusCode() === 429) {
+                throw new ResponseException($e->getMessage(), 429, $e);
             } else {
                 throw new ResponseException('Unexpected error! Invalid response code!', 0, $e);
             }
         } catch (GuzzleServerException $e) {
-            if ($e->getCode() == 503) {
+            if ($e->getCode() === 503) {
                 throw new ServiceUnavailableException('System in maintenance mode!');
             }
 
