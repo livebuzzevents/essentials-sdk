@@ -6,16 +6,12 @@ use Buzz\EssentialsSdk\Exceptions\ErrorException;
 
 /**
  * Class Cast
- *
- * @package Buzz\EssentialsSdk
  */
 class Cast
 {
     /**
-     * @param SdkObject $cast
-     * @param        $response
-     *
      * @return SdkObject
+     *
      * @internal param string $cast
      */
     public static function single(SdkObject $cast, $response)
@@ -31,21 +27,19 @@ class Cast
     }
 
     /**
-     * @param SdkObject $cast
-     * @param      $response
-     *
      * @return mixed
+     *
      * @throws ErrorException
      */
     public static function many(SdkObject $cast, $response): iterable
     {
-        $result = new Collection();
+        $result = new Collection;
 
-        if (!$response) {
+        if (! $response) {
             return $result;
         }
 
-        if (isset($response['total']) && isset($response['data'])) { //for paging
+        if (isset($response['total']) && isset($response['data'])) { // for paging
             $paging = new Paging(static::many($cast, $response['data']));
 
             $paging->setPage($response['current_page']);

@@ -8,12 +8,10 @@ use Buzz\EssentialsSdk\SdkObject;
  * Class Example
  *
  * @property string $name
- * @property integer $age
+ * @property int $age
  * @property array $interests
  * @property-read int $orders
  * @property-write string $note
- * @property \Tests\Example[] $parent
+ * @property Example[] $parent
  */
-class Example extends SdkObject
-{
-}
+class Example extends SdkObject {}

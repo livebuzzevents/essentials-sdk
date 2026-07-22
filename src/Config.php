@@ -6,8 +6,6 @@ namespace Buzz\EssentialsSdk;
  * Class Identity
  *
  * Holds the api credentials for the SDK REST calls
- *
- * @package Identity
  */
 class Config
 {
@@ -53,8 +51,6 @@ class Config
 
     /**
      * Retrieves Event API key
-     *
-     * @return string
      */
     public static function getApiKey(): string
     {
@@ -62,7 +58,7 @@ class Config
     }
 
     /**
-     * @param string $api_key
+     * @param  string  $api_key
      */
     public static function setApiKey($api_key): void
     {
@@ -71,8 +67,6 @@ class Config
 
     /**
      * Retrieves Event host
-     *
-     * @return string
      */
     public static function getEndpoint(): string
     {
@@ -80,120 +74,87 @@ class Config
     }
 
     /**
-     * @param string $endpoint
+     * @param  string  $endpoint
      */
     public static function setEndpoint($endpoint): void
     {
         static::$endpoint = $endpoint;
     }
 
-    /**
-     * @return string
-     */
     public static function getProtocol(): string
     {
         return static::$protocol;
     }
 
     /**
-     * @param string $protocol
+     * @param  string  $protocol
      */
     public static function setProtocol($protocol): void
     {
         static::$protocol = $protocol;
     }
 
-    /**
-     * @return string
-     */
     public static function getVersion(): ?string
     {
         return static::$version;
     }
 
-    /**
-     * @param string $version
-     */
     public static function setVersion(?string $version): void
     {
         static::$version = $version;
     }
 
-    /**
-     * @return string
-     */
     public static function getLanguage(): string
     {
         return static::$language;
     }
 
-    /**
-     * @param string $language
-     */
     public static function setLanguage(string $language): void
     {
         static::$language = $language;
     }
 
-    /**
-     * @return string
-     */
     public static function getProxy(): ?string
     {
         return static::$proxy;
     }
 
-    /**
-     * @param string $proxy
-     */
     public static function setProxy(?string $proxy): void
     {
         static::$proxy = $proxy;
     }
 
-    /**
-     * @return bool
-     */
     public static function getVerifySsl(): bool
     {
         return static::$verify_ssl;
     }
 
     /**
-     * @param bool $verify_ssl
+     * @param  bool  $verify_ssl
      */
     public static function setVerifySsl($verify_ssl): void
     {
         static::$verify_ssl = $verify_ssl;
     }
 
-    /**
-     * @return bool
-     */
     public static function verify(): bool
     {
-        if (!is_null(static::$verify_ssl)) {
+        if (! is_null(static::$verify_ssl)) {
             return static::$verify_ssl;
         }
 
-        if (!is_null(static::$proxy)) {
+        if (! is_null(static::$proxy)) {
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @return string
-     */
     public static function getCustomHeaderPrefix(): string
     {
         return static::$custom_header_prefix;
     }
 
-    /**
-     * @param string $custom_header_prefix
-     */
     public static function setCustomHeaderPrefix(string $custom_header_prefix): void
     {
         static::$custom_header_prefix = $custom_header_prefix;

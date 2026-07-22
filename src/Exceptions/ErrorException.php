@@ -10,8 +10,8 @@ class ErrorException extends \Exception
     {
         $this->error = $error;
 
-        if (!is_array($error)) {
-            $this->message = (string)$this->error;
+        if (! is_array($error)) {
+            $this->message = (string) $this->error;
         } else {
             $this->message = implode(';', array_flatten($this->error));
         }

@@ -2,16 +2,15 @@
 
 namespace Buzz\EssentialsSdk\SdkObject;
 
-use Carbon\Carbon;
 use Buzz\EssentialsSdk\Collection;
 use Buzz\EssentialsSdk\SdkObject;
+use Carbon\Carbon;
 
 trait CopiesData
 {
     /**
      * Copies attributes from target object
      *
-     * @param SdkObject $target
      *
      * @return $this
      */
@@ -29,18 +28,17 @@ trait CopiesData
     /**
      * Creates object from array
      *
-     * @param array $array
      *
      * @return static
      */
     public function copyFromArray(array $array)
     {
         foreach ($array as $property => $value) {
-            if (static::hasProperty($property) && !is_null($value)) {
+            if (static::hasProperty($property) && ! is_null($value)) {
                 $type = static::getPropertyType($property);
-                if (strpos($type, '[]') !== false) { //array
+                if (strpos($type, '[]') !== false) { // array
                     $type                  = trim($type, '[]');
-                    $this->data[$property] = new Collection();
+                    $this->data[$property] = new Collection;
                     foreach ($value as $key => $single) {
                         $this->data[$property]->put($key, static::castSingleProperty($type, $single));
                     }
@@ -58,9 +56,6 @@ trait CopiesData
     }
 
     /**
-     * @param $type
-     * @param $value
-     *
      * @return mixed
      */
     protected static function castSingleProperty($type, $value)
@@ -72,7 +67,7 @@ trait CopiesData
             case 'float':
                 return floatval($value);
             case 'object':
-                return (object)$value;
+                return (object) $value;
             case '\DateTime':
                 return Carbon::createFromTimestamp(strtotime($value));
             default:

@@ -2,43 +2,39 @@
 
 namespace Buzz\EssentialsSdk;
 
-use GuzzleHttp\Client as Guzzle;
+use Buzz\EssentialsSdk\Exceptions\ErrorException;
+use Buzz\EssentialsSdk\Exceptions\ResponseException;
+use Buzz\EssentialsSdk\Exceptions\ServerException;
+use Buzz\EssentialsSdk\Exceptions\UnauthorizedException;
 use Buzz\EssentialsSdk\Service\DefaultRequestData;
 use Buzz\EssentialsSdk\Service\SupportsHeaders;
+use GuzzleHttp\Client as Guzzle;
 
 /**
  * Class Service
- *
- * @package Buzz\EssentialsSdk\Services
  */
 class Service extends Config
 {
-    use SupportsHeaders,
-        DefaultRequestData;
+    use DefaultRequestData,
+        SupportsHeaders;
 
     /**
-     * @param            $method
-     * @param array|null $request
-     *
      * @return mixed
      */
-    final public function get($method, array $request = null)
+    final public function get($method, ?array $request = null)
     {
         return $this->call('get', $method, $request);
     }
 
     /**
-     * @param       $verb
-     * @param       $method
-     * @param array $request
-     *
      * @return mixed
-     * @throws \Buzz\EssentialsSdk\Exceptions\ErrorException
-     * @throws \Buzz\EssentialsSdk\Exceptions\ResponseException
-     * @throws \Buzz\EssentialsSdk\Exceptions\ServerException
-     * @throws \Buzz\EssentialsSdk\Exceptions\UnauthorizedException
+     *
+     * @throws ErrorException
+     * @throws ResponseException
+     * @throws ServerException
+     * @throws UnauthorizedException
      */
-    final protected function call($verb, $method, array $request = null)
+    final protected function call($verb, $method, ?array $request = null)
     {
         if (is_null($request)) {
             $request = [];
@@ -62,8 +58,7 @@ class Service extends Config
     }
 
     /**
-     * @param string $method
-     *
+     * @param  string  $method
      * @return string
      */
     protected function getUrl($method)
@@ -79,45 +74,33 @@ class Service extends Config
     }
 
     /**
-     * @param            $method
-     * @param array|null $request
-     *
      * @return mixed
      */
-    final public function post($method, array $request = null)
+    final public function post($method, ?array $request = null)
     {
         return $this->call('post', $method, $request);
     }
 
     /**
-     * @param            $method
-     * @param array|null $request
-     *
      * @return mixed
      */
-    final public function put($method, array $request = null)
+    final public function put($method, ?array $request = null)
     {
         return $this->call('put', $method, $request);
     }
 
     /**
-     * @param            $method
-     * @param array|null $request
-     *
      * @return mixed
      */
-    final public function patch($method, array $request = null)
+    final public function patch($method, ?array $request = null)
     {
         return $this->call('patch', $method, $request);
     }
 
     /**
-     * @param            $method
-     * @param array|null $request
-     *
      * @return mixed
      */
-    final public function delete($method, array $request = null)
+    final public function delete($method, ?array $request = null)
     {
         return $this->call('delete', $method, $request);
     }

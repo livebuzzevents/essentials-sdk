@@ -4,15 +4,11 @@ namespace Buzz\EssentialsSdk\SdkObject;
 
 /**
  * Trait PreparesRequestData
- *
- * @package Buzz\EssentialsSdk\SdkObject
  */
 trait PreparesRequestData
 {
     /**
-     * @param bool $dirtyDataOnly
-     *
-     * @return array
+     * @param  bool  $dirtyDataOnly
      */
     public function prepareRequestData($dirtyDataOnly = true): array
     {

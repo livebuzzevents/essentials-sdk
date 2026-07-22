@@ -1,8 +1,6 @@
 <?php
 
-use Buzz\EssentialsSdk;
-
-if (!function_exists('class_uses_deep')) {
+if (! function_exists('class_uses_deep')) {
     function class_uses_deep($class, $autoload = true)
     {
         $traits = [];
@@ -14,11 +12,11 @@ if (!function_exists('class_uses_deep')) {
 
         // Get traits of all parent traits
         $traitsToSearch = $traits;
-        while (!empty($traitsToSearch)) {
+        while (! empty($traitsToSearch)) {
             $newTraits      = class_uses(array_pop($traitsToSearch), $autoload);
             $traits         = array_merge($newTraits, $traits);
             $traitsToSearch = array_merge($newTraits, $traitsToSearch);
-        };
+        }
 
         foreach ($traits as $trait => $same) {
             $traits = array_merge(class_uses($trait, $autoload), $traits);
