@@ -9,7 +9,7 @@ class CastTest extends TestCase
     /** @test */
     public function test_copies_settings()
     {
-        $class = new Example();
+        $class = new Example;
         $class->expand(['parent']);
         $class->options(['key' => 'value']);
 

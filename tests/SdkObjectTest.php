@@ -9,7 +9,7 @@ class SdkObjectTest extends TestCase
     /** @test */
     public function test_parses_properties()
     {
-        $class = new Example();
+        $class = new Example;
 
         $this->assertSame(
             $class::getProperties()->keys()->all(),
@@ -33,11 +33,11 @@ class SdkObjectTest extends TestCase
     /** @test */
     public function test_read_only_properties()
     {
-        $example = new Example();
+        $example = new Example;
 
         $var = $example->orders;
 
-        $this->expectExceptionMessage("Property orders is read-only!");
+        $this->expectExceptionMessage('Property orders is read-only!');
         $this->expectException(ErrorException::class);
 
         $example->orders = 123;
@@ -46,12 +46,12 @@ class SdkObjectTest extends TestCase
     /** @test */
     public function test_write_only_properties()
     {
-        $example = new Example();
+        $example = new Example;
 
         $example->note = 'some note';
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage("Property note is write-only!");
+        $this->expectExceptionMessage('Property note is write-only!');
 
         $var = $example->note;
     }
@@ -59,7 +59,7 @@ class SdkObjectTest extends TestCase
     /** @test */
     public function test_support_dirty_data()
     {
-        $example = new Example();
+        $example = new Example;
 
         $this->assertTrue($example->isClean());
         $this->assertFalse($example->isDirty());
@@ -74,7 +74,7 @@ class SdkObjectTest extends TestCase
         $this->assertTrue($example->isDirty('name'));
         $this->assertTrue($example->isDirty('age'));
         $this->assertFalse($example->isDirty('interests'));
-        $this->assertSame($example->getDirty(), ['name' => "Jordan Dobrev", 'age' => 27]);
+        $this->assertSame($example->getDirty(), ['name' => 'Jordan Dobrev', 'age' => 27]);
 
         $example->interests = null;
 
@@ -84,7 +84,7 @@ class SdkObjectTest extends TestCase
 
         $this->assertTrue($example->isClean());
 
-        $example2       = new Example();
+        $example2       = new Example;
         $example2->name = 'Luke Skywalker';
 
         $example->parent = $example2;
@@ -107,7 +107,7 @@ class SdkObjectTest extends TestCase
     /** @test */
     public function test_to_array_returns_non_documented_data()
     {
-        $example = new Example();
+        $example = new Example;
 
         $example->some_property_name = 'some_value';
 
@@ -117,7 +117,7 @@ class SdkObjectTest extends TestCase
     /** @test */
     public function test_prepares_request_works()
     {
-        $example = new Example();
+        $example = new Example;
 
         $example->some_property_name = 'some_value';
 

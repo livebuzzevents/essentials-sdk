@@ -4,8 +4,6 @@ namespace Buzz\EssentialsSdk\SdkObject;
 
 /**
  * Trait HandlesDirtyAttributes
- *
- * @package Buzz\EssentialsSdk\SdkObject
  */
 trait HandlesDirtyAttributes
 {
@@ -17,9 +15,7 @@ trait HandlesDirtyAttributes
     /**
      * Determine if the model or given attribute(s) have been modified.
      *
-     * @param  array|string|null $attributes
-     *
-     * @return bool
+     * @param  array|string|null  $attributes
      */
     public function isDirty($attributes = null): bool
     {
@@ -43,28 +39,21 @@ trait HandlesDirtyAttributes
     /**
      * Determine if the object or given attribute(s) have remained the same.
      *
-     * @param  array|string|null $attributes
-     *
-     * @return bool
+     * @param  array|string|null  $attributes
      */
     public function isClean($attributes = null): bool
     {
-        return !$this->isDirty(...func_get_args());
+        return ! $this->isDirty(...func_get_args());
     }
 
     /**
      * Get the attributes that have been changed since last sync.
-     *
-     * @return array
      */
     public function getDirty(): array
     {
         return array_only($this->data, $this->dirty_attributes);
     }
 
-    /**
-     * @param string $attribute
-     */
     public function addDirtyAttribute(string $attribute): void
     {
         if (in_array($attribute, $this->dirty_attributes)) {
@@ -88,12 +77,13 @@ trait HandlesDirtyAttributes
     public function markSetDataAsDirty()
     {
         foreach ($this->data as $key => $value) {
-            if (!static::hasProperty($key)) {
+            if (! static::hasProperty($key)) {
                 $this->addDirtyAttribute($key);
+
                 continue;
             }
 
-            if (!static::isPropertyWritable($key)) {
+            if (! static::isPropertyWritable($key)) {
                 continue;
             }
 

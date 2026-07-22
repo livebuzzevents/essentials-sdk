@@ -10,9 +10,6 @@ trait DefaultRequestData
     protected $default_request = [];
 
     /**
-     * @param $key
-     * @param $value
-     *
      * @return $this
      */
     public function setDefaultRequest($key, $value)
@@ -25,7 +22,6 @@ trait DefaultRequestData
     /**
      * Combines request data with default request data
      *
-     * @param array $request
      *
      * @return array
      */

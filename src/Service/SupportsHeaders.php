@@ -18,8 +18,6 @@ trait SupportsHeaders
     }
 
     /**
-     * @param array $headers
-     *
      * @return $this
      */
     public function setHeaders(array $headers)
@@ -29,22 +27,14 @@ trait SupportsHeaders
         return $this;
     }
 
-    /**
-     * @param string $header
-     * @param string $value
-     */
     public function setHeader(string $header, string $value)
     {
         $this->headers[$header] = $value;
     }
 
-    /**
-     * @param string $header
-     * @param string $value
-     */
     public function setCustomHeader(string $header, string $value)
     {
-        $this->headers[static::$custom_header_prefix . $header] = $value;
+        $this->headers[static::$custom_header_prefix.$header] = $value;
     }
 
     /**
@@ -54,6 +44,6 @@ trait SupportsHeaders
     {
         $this->setCustomHeader('Version', static::getVersion());
         $this->setHeader('Accept-Language', static::getLanguage());
-        $this->setHeader('Authorization', 'Bearer ' . static::getApiKey());
+        $this->setHeader('Authorization', 'Bearer '.static::getApiKey());
     }
 }

@@ -1,4 +1,6 @@
-<?php namespace Buzz\EssentialsSdk;
+<?php
+
+namespace Buzz\EssentialsSdk;
 
 use Buzz\EssentialsSdk\Contracts\Client;
 use Buzz\EssentialsSdk\Exceptions\ErrorException;
@@ -9,14 +11,13 @@ use Buzz\EssentialsSdk\Exceptions\UnauthorizedException;
 use Exception;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException as GuzzleServerException;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class Client
- *
- * @package Buzz\EssentialsSdk
  */
 class GuzzleClient implements Client
 {
@@ -25,27 +26,20 @@ class GuzzleClient implements Client
      */
     protected $guzzle;
 
-    /**
-     * @param Guzzle $guzzle
-     */
-    public function __construct(Guzzle $guzzle = null)
+    public function __construct(?Guzzle $guzzle = null)
     {
-        $this->guzzle = $guzzle ?: new Guzzle();
+        $this->guzzle = $guzzle ?: new Guzzle;
     }
 
     /**
-     * @param       $verb
-     * @param       $url
-     * @param array $request
-     * @param array $headers
-     *
      * @return mixed
+     *
      * @throws ErrorException
      * @throws ResponseException
      * @throws ServerException
      * @throws ServiceUnavailableException
      * @throws UnauthorizedException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function request($verb, $url, array $request = [], array $headers = [])
     {
@@ -71,7 +65,7 @@ class GuzzleClient implements Client
                     return $contents;
                 }
 
-                throw new ResponseException('Unexpected error! Response not valid JSON:' . $contents);
+                throw new ResponseException('Unexpected error! Response not valid JSON:'.$contents);
             }
         } catch (GuzzleClientException $e) {
             $response = $e->getResponse();
@@ -82,7 +76,7 @@ class GuzzleClient implements Client
 
                 throw new ErrorException(
                     $responseContent['error'],
-                    !empty($responseContent['code']) ? $responseContent['code'] : 0
+                    ! empty($responseContent['code']) ? $responseContent['code'] : 0
                 );
             } elseif ($response->getStatusCode() === 401) {
                 if (config('app.debug')) {
@@ -111,8 +105,6 @@ class GuzzleClient implements Client
     /**
      * Build on top of the request and sends the required data for rest authorization
      *
-     * @param array $request
-     * @param array $headers
      *
      * @return array
      */

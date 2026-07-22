@@ -2,28 +2,26 @@
 
 namespace Buzz\EssentialsSdk;
 
-use DateTime;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use JsonSerializable;
 use Buzz\EssentialsSdk\Exceptions\ErrorException;
 use Buzz\EssentialsSdk\SdkObject\CopiesData;
 use Buzz\EssentialsSdk\SdkObject\HandlesDirtyAttributes;
 use Buzz\EssentialsSdk\SdkObject\ParsesProperties;
 use Buzz\EssentialsSdk\SdkObject\PreparesRequestData;
+use DateTime;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use JsonSerializable;
 
 /**
  * @Annotation
  * Class Base
- *
- * @package Buzz\EssentialsSdk\SdkObject
  */
-abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
+abstract class SdkObject implements Arrayable, Jsonable, JsonSerializable
 {
-    use HandlesDirtyAttributes,
+    use CopiesData,
+        HandlesDirtyAttributes,
         ParsesProperties,
-        PreparesRequestData,
-        CopiesData;
+        PreparesRequestData;
 
     /**
      * @var array
@@ -66,8 +64,8 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
      * if data is object or array it clones all fields
      * else it sets the Id
      *
-     * @param null|int|array|\StdClass $data
-     * @param bool $clean_dirty_attributes
+     * @param  null|int|array|\StdClass  $data
+     * @param  bool  $clean_dirty_attributes
      */
     public function __construct($data = null, $clean_dirty_attributes = false)
     {
@@ -77,7 +75,7 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
             if ($data instanceof SdkObject) {
                 $this->copy($data);
             } elseif (is_object($data)) {
-                $this->copyFromArray((array)$data);
+                $this->copyFromArray((array) $data);
             } elseif (is_array($data)) {
                 $this->copyFromArray($data);
             } else {
@@ -91,20 +89,19 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @param $key
-     *
      * @return mixed
+     *
      * @throws ErrorException
      */
     public function __get($key)
     {
         if (static::hasProperty($key)) {
-            if (!static::isPropertyReadable($key)) {
+            if (! static::isPropertyReadable($key)) {
                 throw new ErrorException(sprintf('Property %1$s is write-only!', $key));
             }
         }
 
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace(['_'], ' ', $key))) . 'Property';
+        $method = 'get'.str_replace(' ', '', ucwords(str_replace(['_'], ' ', $key))).'Property';
 
         if (method_exists($this, $method)) {
             return $this->{$method}($key);
@@ -114,32 +111,29 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @param $key
-     * @param $value
-     *
-     * @throws \Buzz\EssentialsSdk\Exceptions\ErrorException
+     * @throws ErrorException
      */
     public function __set($key, $value)
     {
         if (static::hasProperty($key)) {
-            if ($this->guard && !static::isPropertyWritable($key)) {
+            if ($this->guard && ! static::isPropertyWritable($key)) {
                 throw new ErrorException(sprintf('Property %1$s is read-only!', $key));
             }
         }
 
-        $method = 'set' . str_replace(' ', '', ucwords(str_replace(['_'], ' ', $key))) . 'Property';
+        $method = 'set'.str_replace(' ', '', ucwords(str_replace(['_'], ' ', $key))).'Property';
 
         $before = $this->data[$key] ?? null;
 
-        if (!array_key_exists($key, $this->data)) {
+        if (! array_key_exists($key, $this->data)) {
             $this->addDirtyAttribute($key);
         }
 
         if (method_exists($this, $method)) {
             $this->{$method}($value);
 
-            if (!array_key_exists($key, $this->data)) {
-                throw new ErrorException($method . ' should set value!');
+            if (! array_key_exists($key, $this->data)) {
+                throw new ErrorException($method.' should set value!');
             }
         } else {
             $this->data[$key] = $value;
@@ -153,8 +147,6 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @param $key
-     *
      * @return bool
      */
     public function __isset($key)
@@ -162,9 +154,6 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
         return isset($this->data[$key]);
     }
 
-    /**
-     * @param $key
-     */
     public function __unset($key)
     {
         if (array_key_exists($key, $this->data)) {
@@ -173,9 +162,6 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
         }
     }
 
-    /**
-     * @return array
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();
@@ -184,8 +170,7 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     /**
      * Get the collection of items as JSON.
      *
-     * @param  int $options
-     *
+     * @param  int  $options
      * @return string
      */
     public function toJson($options = 0)
@@ -204,9 +189,7 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @param bool $dirty
-     *
-     * @return array
+     * @param  bool  $dirty
      */
     public function toArray($dirty = false): array
     {
@@ -215,11 +198,6 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
         return $this->convertArrayToJsonSerializable($data);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
     protected function convertArrayToJsonSerializable(array $data): array
     {
         $array = [];
@@ -248,8 +226,6 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @param array $expand
-     *
      * @return $this
      */
     public function expand(array $expand = [])
@@ -268,8 +244,6 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @param array $options
-     *
      * @return $this
      */
     public function options(array $options = [])
@@ -288,7 +262,7 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     }
 
     /**
-     * @return \Buzz\EssentialsSdk\Service
+     * @return Service
      */
     protected function api()
     {
@@ -308,10 +282,10 @@ abstract class SdkObject implements Arrayable, JsonSerializable, Jsonable
     /**
      * Override this method if using extended service
      *
-     * @return \Buzz\EssentialsSdk\Service
+     * @return Service
      */
     protected function service()
     {
-        return new Service();
+        return new Service;
     }
 }

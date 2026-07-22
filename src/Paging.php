@@ -4,13 +4,9 @@ namespace Buzz\EssentialsSdk;
 
 /**
  * Class Paging
- *
- * @package Buzz\EssentialsSdk
  */
 /**
  * Class Paging
- *
- * @package Buzz\EssentialsSdk
  */
 class Paging extends Collection
 {
@@ -53,7 +49,7 @@ class Paging extends Collection
     }
 
     /**
-     * @param int $total
+     * @param  int  $total
      */
     public function setTotal($total)
     {
@@ -69,7 +65,7 @@ class Paging extends Collection
     }
 
     /**
-     * @param int $page
+     * @param  int  $page
      */
     public function setPage($page)
     {
@@ -85,7 +81,7 @@ class Paging extends Collection
     }
 
     /**
-     * @param int $per_page
+     * @param  int  $per_page
      */
     public function setPerPage($per_page)
     {
@@ -101,7 +97,7 @@ class Paging extends Collection
     }
 
     /**
-     * @param int $from
+     * @param  int  $from
      */
     public function setFrom($from)
     {
@@ -117,7 +113,7 @@ class Paging extends Collection
     }
 
     /**
-     * @param int $to
+     * @param  int  $to
      */
     public function setTo($to)
     {
@@ -133,7 +129,7 @@ class Paging extends Collection
     }
 
     /**
-     * @param int $last_page
+     * @param  int  $last_page
      */
     public function setLastPage($last_page)
     {
