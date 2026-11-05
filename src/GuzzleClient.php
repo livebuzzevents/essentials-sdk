@@ -79,7 +79,7 @@ class GuzzleClient implements Client
                     ! empty($responseContent['code']) ? $responseContent['code'] : 0
                 );
             } elseif ($response->getStatusCode() === 401) {
-                if (function_exists('config') && config('app.debug')) {
+                if (! function_exists('config') || config('app.debug')) {
                     throw new HttpException(401, $contents);
                 }
 
